@@ -1,0 +1,30 @@
+version: '2'
+services:
+  fluentd:
+    image: fd-cd-apache2
+    expose:
+      - 9103
+      - 80
+    links:
+      - "elasticsearch"
+    ports:
+      - "80:80"
+      - "9103:9103"
+      - "24224:24224"
+      - "24224:24224/udp"
+
+  elasticsearch:
+    image: elasticsearch:6.5.1
+    expose:
+      - 9200
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+
+  kibana:
+    image: kibana:6.5.1
+    links:
+      - "elasticsearch"
+    ports:
+      - "5601:5601"
